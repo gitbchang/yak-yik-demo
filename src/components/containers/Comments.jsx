@@ -13,25 +13,7 @@ class Comments extends Component {
         body: '',
         timestamp: ''
       },
-      commentList: [
-        {
-          body: 'Hello',
-          userName: 'joe smith',
-          timestamp: '10:30'
-        }, {
-          body: 'this is a test',
-          userName: 'bchang',
-          timestamp: '10:30'
-        }, {
-          body: 'i liked this post',
-          userName: 'random',
-          timestamp: '10:30'
-        }, {
-          body: 'hello everyone',
-          userName: 'dtrump',
-          timestamp: '10:30'
-        }
-      ]
+      commentList: []
     }
   }
 
