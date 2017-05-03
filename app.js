@@ -7,12 +7,15 @@ var bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 var dbUrl = 'mongodb://localhost/yak-yik';
+var dbHeroku = 'mongodb://heroku_n7gnhzpc:v40709mc50122j2cfava108ntl@ds129651.mlab.com:29651/heroku_n7gnhzpc';
 
-mongoose.connect(dbUrl, function(err, res){
+
+
+mongoose.connect(dbHeroku, function(err, res){
   if(err){
     console.log('DB CONNECTION FAILED', err);
   } else {
-    console.log('DB CONNECTION SUCCESS', dbUrl);
+    console.log('DB CONNECTION SUCCESS', dbHeroku);
   }
 });
 
