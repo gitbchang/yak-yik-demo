@@ -1,7 +1,4 @@
 export default {
-  universal: {
-    fontFamily: 'Roboto, sans-serif'
-  },
   comment: {
     commentsBox: {
         padding: 12,
