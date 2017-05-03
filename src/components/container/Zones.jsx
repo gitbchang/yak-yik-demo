@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import Zone from './Zone';
+import Zone from '../view/Zone';
 
 class Zones extends Component {
   constructor(props) {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import Zones from './Zones';
-import Comments from './Comments';
+import Zones from '../container/Zones';
+import Comments from '../container/Comments';
 
-import styles from './styles';
+import styles from '../../styles';
 
 class Home extends Component {
   render() {

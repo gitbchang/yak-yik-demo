@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-import Comment from './Comment';
+import Comment from '../view/Comment';
 
-import styles from './styles';
+import styles from '../../styles';
 
 class Comments extends Component {
   constructor(props) {
@@ -40,7 +40,7 @@ class Comments extends Component {
       });
 
     return (
-      <div className='container'>
+      <div>
         <h2>All Comments in Zone</h2>
         <div
           style={styles.comment.commentsBox}>
