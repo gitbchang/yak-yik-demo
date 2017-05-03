@@ -1,6 +1,16 @@
 export default {
   universal: {
-
+    fontFamily: 'Roboto, sans-serif'
+  },
+  comment: {
+    commentsBox: {
+        padding: 12,
+        background: '#f9f9f9',
+        border: '1px solid #ddd'
+    },
+    commentList: {
+      listStyleType: 'none'
+    }
   },
   zone: {
     container: {
