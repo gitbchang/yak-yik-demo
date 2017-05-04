@@ -2,19 +2,37 @@ import superagent from 'superagent';
 import axios from 'axios';
 
 const axiosUtil = {
-  get:(url, params, callback) => {
-    axios({method: 'get', url: url, params: params, responseType: 'json'}).then(function (response) {
-      callback(null, response.data);      
-    }).catch(function(error){
-      callback(error, null);
-    })
+  get: (url, params, callback) => {
+    axios({method: 'get', url: url, params: params, responseType: 'json'})
+      .then(function (response) {
+        callback(null, response.data);
+      })
+      .catch(function (error) {
+        callback(error, null);
+      })
   },
   post: (url, body, callback) => {
-    axios({method: 'post', url: url, data:body, responseType: 'json'}).then(function (response){
-      callback(null, response.data);
-    }).catch(function(error){
-      callback(error, null);
-    })
+    axios({method: 'post', url: url, data: body, responseType: 'json'})
+      .then(function (response) {
+        callback(null, response.data);
+      })
+      .catch(function (error) {
+        callback(error, null);
+      })
+  },
+  post: (url, body, callback) => {
+    axios({method: 'post', url: url, data: body, responseType: 'json'})
+      .then(function (response) {
+        const confirmation = response.data.confirmation;
+        if (confirmation != 'success') {
+          callback({message: response}, null);
+        } else {
+          callback(null, response.data);
+        }
+      })
+      .catch(function (error) {
+        callback(error, null);
+      });
   }
 };
 
@@ -29,38 +47,42 @@ const superagentUtil = {
           callback(err, null);
         }
         const confirmation = response.body.confirmation;
-        // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
-        if(confirmation != 'success'){
-          callback({message: response.body.message}, null);
+        // we need to check if our API call was a success. The first error handling
+        // checks if we hit the server correctly.
+        if (confirmation != 'success') {
+          callback({
+            message: response.body.message
+          }, null);
         } else {
           callback(null, response.body);
         }
-        
+
       });
   },
   post: (url, body, callback) => {
     superagent
-    .post(url)
-    .send(body)
-    .set('Accept', 'application/json')
-    .end((err, response) => {
-      if (err) {
-        callback(err, null);
-      }
-    const confirmation = response.body.confirmation;
-        // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
-        if(confirmation != 'success'){
-          callback({message: response.body.message}, null);
+      .post(url)
+      .send(body)
+      .set('Accept', 'application/json')
+      .end((err, response) => {
+        if (err) {
+          callback(err, null);
+        }
+        const confirmation = response.body.confirmation;
+        // we need to check if our API call was a success. The first error handling
+        // checks if we hit the server correctly.
+        if (confirmation != 'success') {
+          callback({
+            message: response.body.message
+          }, null);
         } else {
           callback(null, response.body);
         }
         // callback(null, response.body);
-    })
+      })
   },
-  put: () => {
-
-  }
+  put: () => {}
 };
 
-// export default axiosUtil;
-export default superagentUtil;
+export default axiosUtil;
+// export default superagentUtil;

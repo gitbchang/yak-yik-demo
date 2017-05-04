@@ -12407,19 +12407,41 @@ var Zones = function (_Component) {
       // updatedZoneList.push(this.state.newZone);
       // this.setState({list: updatedZoneList});
 
-      // APIManager.post('api/zone', updatedZone, (err, response) => {
-      //   if(err) {
-      //     console.log("error", err.message);
-      //     return;
+      _utils.APIManager.post('api/zone', updatedZone, function (err, response) {
+        if (err) {
+          console.log("error", err.message);
+          return;
+        }
+        console.log('ZONE CREATED:', response);
+      });
+
+      // axios({method: 'post', url: 'api/zone', data:updatedZone, responseType: 'json'}).then(function (response){
+      //   console.log("post response", response);
+      //   const confirmation = response.data.confirmation;
+      //   if(confirmation != 'success'){
+      //     console.error("error", confirmation);
+      //   } 
+      // }).catch(function(error){
+      //   console.error("error", error);
+      // })
+
+      // superagent
+      // .post('api/zone')
+      // .send(updatedZone)
+      // .set('Accept', 'application/json')
+      // .end((err, response) => {
+      //   if (err) {
+      //     callback(err, null);
       //   }
-      //   console.log('ZONE CREATED:', response);
+      // const confirmation = response.body.confirmation;
+      //     // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
+      //     if(confirmation != 'success'){
+      //       console.error("error", response.body.message);
+      //     } else {
+      //       console.log("post reponse", response.body);
+      //     }        
       // });
 
-      (0, _axios2.default)({ method: 'post', url: 'api/zone', data: updatedZone, responseType: 'json' }).then(function (response) {
-        console.log("post response", response);
-      }).catch(function (error) {
-        console.error("error", error);
-      });
     };
 
     _this.updateZone = function (e) {
@@ -12775,7 +12797,9 @@ var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var axiosUtil = {
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var axiosUtil = _defineProperty({
   get: function get(url, params, callback) {
     (0, _axios2.default)({ method: 'get', url: url, params: params, responseType: 'json' }).then(function (response) {
       callback(null, response.data);
@@ -12790,7 +12814,18 @@ var axiosUtil = {
       callback(error, null);
     });
   }
-};
+}, 'post', function post(url, body, callback) {
+  (0, _axios2.default)({ method: 'post', url: url, data: body, responseType: 'json' }).then(function (response) {
+    var confirmation = response.data.confirmation;
+    if (confirmation != 'success') {
+      callback({ message: response }, null);
+    } else {
+      callback(null, response.data);
+    }
+  }).catch(function (error) {
+    callback(error, null);
+  });
+});
 
 var superagentUtil = {
   get: function get(url, params, callback) {
@@ -12799,9 +12834,12 @@ var superagentUtil = {
         callback(err, null);
       }
       var confirmation = response.body.confirmation;
-      // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
+      // we need to check if our API call was a success. The first error handling
+      // checks if we hit the server correctly.
       if (confirmation != 'success') {
-        callback({ message: response.body.message }, null);
+        callback({
+          message: response.body.message
+        }, null);
       } else {
         callback(null, response.body);
       }
@@ -12813,9 +12851,12 @@ var superagentUtil = {
         callback(err, null);
       }
       var confirmation = response.body.confirmation;
-      // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
+      // we need to check if our API call was a success. The first error handling
+      // checks if we hit the server correctly.
       if (confirmation != 'success') {
-        callback({ message: response.body.message }, null);
+        callback({
+          message: response.body.message
+        }, null);
       } else {
         callback(null, response.body);
       }
@@ -12825,8 +12866,8 @@ var superagentUtil = {
   put: function put() {}
 };
 
-// export default axiosUtil;
-exports.default = superagentUtil;
+exports.default = axiosUtil;
+// export default superagentUtil;
 
 /***/ }),
 /* 120 */

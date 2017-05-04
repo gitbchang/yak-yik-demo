@@ -61,19 +61,40 @@ class Zones extends Component {
     // updatedZoneList.push(this.state.newZone);
     // this.setState({list: updatedZoneList});
 
-    // APIManager.post('api/zone', updatedZone, (err, response) => {
-    //   if(err) {
-    //     console.log("error", err.message);
-    //     return;
-    //   }
-    //   console.log('ZONE CREATED:', response);
-    // });
+    APIManager.post('api/zone', updatedZone, (err, response) => {
+      if(err) {
+        console.log("error", err.message);
+        return;
+      }
+      console.log('ZONE CREATED:', response);
+    });
 
-    axios({method: 'post', url: 'api/zone', data:updatedZone, responseType: 'json'}).then(function (response){
-      console.log("post response", response);
-    }).catch(function(error){
-      console.error("error", error);
-    })
+    // axios({method: 'post', url: 'api/zone', data:updatedZone, responseType: 'json'}).then(function (response){
+    //   console.log("post response", response);
+    //   const confirmation = response.data.confirmation;
+    //   if(confirmation != 'success'){
+    //     console.error("error", confirmation);
+    //   } 
+    // }).catch(function(error){
+    //   console.error("error", error);
+    // })
+
+    // superagent
+    // .post('api/zone')
+    // .send(updatedZone)
+    // .set('Accept', 'application/json')
+    // .end((err, response) => {
+    //   if (err) {
+    //     callback(err, null);
+    //   }
+    // const confirmation = response.body.confirmation;
+    //     // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
+    //     if(confirmation != 'success'){
+    //       console.error("error", response.body.message);
+    //     } else {
+    //       console.log("post reponse", response.body);
+    //     }        
+    // });
         
   
   }
