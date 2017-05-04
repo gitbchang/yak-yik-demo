@@ -21,7 +21,7 @@ class CreateZone extends Component {
   }
 
   submitZone = (newZone) => {
-    this.props.onSubmit(this.state.newZone);
+    this.props.onNewZone(this.state.newZone);
   }
 
   render() {

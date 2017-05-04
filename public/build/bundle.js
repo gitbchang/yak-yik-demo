@@ -12412,7 +12412,7 @@ var Zones = function (_Component) {
           null,
           listItems
         ),
-        _react2.default.createElement(_presentation.CreateZone, { onSubmit: this.submitZone })
+        _react2.default.createElement(_presentation.CreateZone, { onNewZone: this.submitZone })
       );
     }
   }]);
@@ -28449,7 +28449,7 @@ var CreateZone = function (_Component) {
     };
 
     _this.submitZone = function (newZone) {
-      _this.props.onSubmit(_this.state.newZone);
+      _this.props.onNewZone(_this.state.newZone);
     };
 
     _this.state = {

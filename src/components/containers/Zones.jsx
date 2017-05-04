@@ -68,7 +68,7 @@ class Zones extends Component {
         <ol>
           {listItems}
         </ol>
-        <CreateZone onSubmit={this.submitZone} />
+        <CreateZone onNewZone={this.submitZone} />
       </div>
     );
   }
