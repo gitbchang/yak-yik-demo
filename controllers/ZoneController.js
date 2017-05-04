@@ -39,7 +39,7 @@ module.exports = {
         return;
       }
       callback(null, zone);
-    })
+    });
   },
   update: function(id, params, callback){
     Zone.findByIdAndUpdate(id, params, {new:true}, function(err, zone){

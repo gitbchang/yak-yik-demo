@@ -50,7 +50,7 @@ class Zones extends Component {
   }
 
   submitZone = () => {
-    let updatedZone = Object.assign([], this.state.newZone);
+    let updatedZone = Object.assign({}, this.state.newZone);
     // clean up object before sending to API
     updatedZone['zipCodes'] = updatedZone.zipCode.split(',');
     updatedZone['timestamp'] = '';
@@ -66,7 +66,13 @@ class Zones extends Component {
         console.log("error", err.message);
         return;
       }
-      console.log('ZONE CREATED:', response);
+      console.log('ZONE CREATED:', JSON.stringify(response));
+      // let updatedList = Object.assign([], this.state.list);
+      
+      // updatedList.push(response.result);
+      // this.setState({
+      //   list: updatedList
+      // });
     });
 
     // axios({method: 'post', url: 'api/zone', data:updatedZone, responseType: 'json'}).then(function (response){
@@ -81,7 +87,7 @@ class Zones extends Component {
 
     // superagent
     // .post('api/zone')
-    // .send(updatedZone)
+    // .send({name: 'prefilled data', zipCodes: ['56565']})
     // .set('Accept', 'application/json')
     // .end((err, response) => {
     //   if (err) {

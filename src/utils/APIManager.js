@@ -69,11 +69,11 @@ const superagentUtil = {
         } else {
           callback(null, response.body);
         }
-        // callback(null, response.body);
+        
       })
   },
   put: () => {}
 };
 
-export default axiosUtil;
-// export default superagentUtil;
+// export default axiosUtil;
+export default superagentUtil;

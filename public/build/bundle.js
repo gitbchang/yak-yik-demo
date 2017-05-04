@@ -12396,7 +12396,7 @@ var Zones = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Zones.__proto__ || Object.getPrototypeOf(Zones)).call(this, props));
 
     _this.submitZone = function () {
-      var updatedZone = Object.assign([], _this.state.newZone);
+      var updatedZone = Object.assign({}, _this.state.newZone);
       // clean up object before sending to API
       updatedZone['zipCodes'] = updatedZone.zipCode.split(',');
       updatedZone['timestamp'] = '';
@@ -12412,7 +12412,13 @@ var Zones = function (_Component) {
           console.log("error", err.message);
           return;
         }
-        console.log('ZONE CREATED:', response);
+        console.log('ZONE CREATED:', JSON.stringify(response));
+        // let updatedList = Object.assign([], this.state.list);
+
+        // updatedList.push(response.result);
+        // this.setState({
+        //   list: updatedList
+        // });
       });
 
       // axios({method: 'post', url: 'api/zone', data:updatedZone, responseType: 'json'}).then(function (response){
@@ -12427,7 +12433,7 @@ var Zones = function (_Component) {
 
       // superagent
       // .post('api/zone')
-      // .send(updatedZone)
+      // .send({name: 'prefilled data', zipCodes: ['56565']})
       // .set('Accept', 'application/json')
       // .end((err, response) => {
       //   if (err) {
@@ -12852,14 +12858,13 @@ var superagentUtil = {
       } else {
         callback(null, response.body);
       }
-      // callback(null, response.body);
     });
   },
   put: function put() {}
 };
 
-exports.default = axiosUtil;
-// export default superagentUtil;
+// export default axiosUtil;
+exports.default = superagentUtil;
 
 /***/ }),
 /* 120 */
