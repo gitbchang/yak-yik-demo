@@ -12370,7 +12370,15 @@ var Zones = function (_Component) {
       });
     };
 
+    _this.selectZone = function (zoneIndex) {
+      console.log('select zone');
+      _this.setState({
+        selected: zoneIndex
+      });
+    };
+
     _this.state = {
+      selected: 0,
       list: []
     };
     return _this;
@@ -12392,11 +12400,14 @@ var Zones = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this3 = this;
+
       var listItems = this.state.list.map(function (zone, i) {
+        var selected = i == _this3.state.selected;
         return _react2.default.createElement(
           'li',
           { key: i },
-          _react2.default.createElement(_presentation.Zone, { currentZone: zone })
+          _react2.default.createElement(_presentation.Zone, { zoneIndex: i, select: _this3.selectZone, isSelected: selected, currentZone: zone })
         );
       });
       return _react2.default.createElement(
@@ -12565,9 +12576,22 @@ var Zone = function (_Component) {
   _inherits(Zone, _Component);
 
   function Zone() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, Zone);
 
-    return _possibleConstructorReturn(this, (Zone.__proto__ || Object.getPrototypeOf(Zone)).apply(this, arguments));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Zone.__proto__ || Object.getPrototypeOf(Zone)).call.apply(_ref, [this].concat(args))), _this), _this.onSelectTitle = function (event) {
+      event.preventDefault();
+      // this function goes back to the container
+      console.log("testing z index", _this.props.zoneIndex);
+      _this.props.select(_this.props.zoneIndex);
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(Zone, [{
@@ -12575,6 +12599,15 @@ var Zone = function (_Component) {
     value: function render() {
       var style = _styles2.default.zone;
       var currentZone = this.props.currentZone;
+      var title = this.props.isSelected ? _react2.default.createElement(
+        'a',
+        { style: style.zoneLink, href: '#' },
+        this.props.currentZone.name
+      ) : _react2.default.createElement(
+        'a',
+        { href: '#' },
+        this.props.currentZone.name
+      );
 
       var zipString = '';
       if (currentZone.zipCodes) {
@@ -12590,12 +12623,8 @@ var Zone = function (_Component) {
         { style: style.container },
         _react2.default.createElement(
           'h2',
-          { style: style.header2 },
-          _react2.default.createElement(
-            'a',
-            { style: style.zoneLink, href: '#' },
-            this.props.currentZone.name
-          )
+          { onClick: this.onSelectTitle, style: style.header2 },
+          title
         ),
         _react2.default.createElement(
           'span',
