@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import axios from 'axios';
+import superagent from 'superagent';
 
 import Comment from '../presentation/Comment';
-
 import styles from './styles';
 
 class Comments extends Component {
@@ -15,6 +16,29 @@ class Comments extends Component {
       },
       commentList: []
     }
+  }
+
+  componentDidMount() {
+
+    // const self = this;
+    // axios({method: 'get', url: 'api/comment', responseType: 'json'}).then(function (response) {
+    //   console.log(response.data);
+    //   let results = response.data.results;
+    //   self.setState({commentList: results});
+    // });
+
+    superagent
+      .get('api/comment')
+      .query(null)
+      .set('Accept', 'application/json')
+      .end((err, response) => {
+        if (err) {
+          console.log("error", err);
+        }
+        let results = response.body.results;
+        this.setState({commentList: results});
+      });
+
   }
 
   submitComment = () => {
@@ -75,12 +99,12 @@ class Comments extends Component {
             className="form-control"
             type="text"
             placeholder="Comment"/><br/>
-          <input type="text"
+          <input
+            type="text"
             onChange={this.updateTime}
             className="form-control"
             type="text"
-            placeholder="timestamp"
-          /><br/>
+            placeholder="timestamp"/><br/>
 
           <button onClick={this.submitComment} className="btn btn-info" type="submit">Submit Comment</button>
         </div>

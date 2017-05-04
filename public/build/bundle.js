@@ -9669,6 +9669,14 @@ var _react = __webpack_require__(17);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _axios = __webpack_require__(205);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _superagent = __webpack_require__(192);
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
 var _Comment = __webpack_require__(88);
 
 var _Comment2 = _interopRequireDefault(_Comment);
@@ -9737,6 +9745,26 @@ var Comments = function (_Component) {
   }
 
   _createClass(Comments, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      // const self = this;
+      // axios({method: 'get', url: 'api/comment', responseType: 'json'}).then(function (response) {
+      //   console.log(response.data);
+      //   let results = response.data.results;
+      //   self.setState({commentList: results});
+      // });
+
+      _superagent2.default.get('api/comment').query(null).set('Accept', 'application/json').end(function (err, response) {
+        if (err) {
+          console.log("error", err);
+        }
+        var results = response.body.results;
+        _this2.setState({ commentList: results });
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _React$createElement;
@@ -9777,7 +9805,8 @@ var Comments = function (_Component) {
             type: 'text',
             placeholder: 'Comment' }),
           _react2.default.createElement('br', null),
-          _react2.default.createElement('input', (_React$createElement = { type: 'text',
+          _react2.default.createElement('input', (_React$createElement = {
+            type: 'text',
             onChange: this.updateTime,
             className: 'form-control'
           }, _defineProperty(_React$createElement, 'type', 'text'), _defineProperty(_React$createElement, 'placeholder', 'timestamp'), _React$createElement)),
@@ -10020,7 +10049,7 @@ var Comment = function (_Component) {
         _react2.default.createElement(
           'span',
           { style: { fontWeight: 'bold' } },
-          this.props.currentComment.userName
+          this.props.currentComment.username
         ),
         _react2.default.createElement(
           'span',
@@ -10084,6 +10113,13 @@ var Zone = function (_Component) {
     key: 'render',
     value: function render() {
       var style = _styles2.default.zone;
+      var currentZone = this.props.currentZone;
+      var allZips = [];
+      currentZone.zipCodes.forEach(function (zip) {
+        allZips.push(zip);
+      });
+      allZips = allZips.join(', ');
+
       return _react2.default.createElement(
         'div',
         { style: style.container },
@@ -10100,7 +10136,7 @@ var Zone = function (_Component) {
           'span',
           { className: 'detail' },
           'Zip: ',
-          this.props.currentZone.zipCodes[0]
+          allZips
         ),
         _react2.default.createElement('br', null),
         _react2.default.createElement(
