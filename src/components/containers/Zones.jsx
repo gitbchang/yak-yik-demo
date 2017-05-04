@@ -2,18 +2,13 @@ import React, {Component} from 'react';
 import superagent from 'superagent';
 import axios from 'axios';
 
-import Zone from '../presentation/Zone';
+import { CreateZone, Zone } from '../presentation/';
 import { APIManager } from '../../utils/';
 
 class Zones extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newZone: {
-        name: '',
-        zipCode: '',
-        numComments: 0
-      },
       list: []
     };
   }
@@ -30,19 +25,20 @@ class Zones extends Component {
 
   }
 
-  submitZone = () => {
-    let updatedZone = Object.assign({}, this.state.newZone);
+  submitZone = (newZone) => {
+    // let newZone = Object.assign({}, this.state.newZone);
     // clean up object before sending to API
-    updatedZone['zipCodes'] = updatedZone.zipCode.split(',');
-    updatedZone['timestamp'] = '';
-    delete updatedZone.zipCode;
-    delete updatedZone.numComments;
+    console.log('new zone before modification', newZone);
+    newZone['zipCodes'] = newZone.zipCode.split(',');
+    newZone['timestamp'] = '';
+    delete newZone.zipCode;
+    delete newZone.numComments;
 
-    console.log("updated zone", updatedZone);
-    // updatedZoneList.push(this.state.newZone);
-    // this.setState({list: updatedZoneList});
+    console.log("updated zone", newZone);
+    // newZoneList.push(this.state.newZone);
+    // this.setState({list: newZoneList});
 
-    APIManager.post('api/zone', updatedZone, (err, response) => {
+    APIManager.post('api/zone', newZone, (err, response) => {
       if(err) {
         console.log("error", err.message);
         return;
@@ -55,12 +51,6 @@ class Zones extends Component {
       });
     });       
   
-  }
-
-  updateZone = (e) => {
-    let zoneObject = Object.assign({}, this.state.newZone);
-    zoneObject[e.target.id] = e.target.value;
-    this.setState({newZone: zoneObject});
   }
 
   render() {
@@ -78,20 +68,7 @@ class Zones extends Component {
         <ol>
           {listItems}
         </ol>
-
-        <input
-          id="name"
-          onChange={this.updateZone}
-          className="form-control"
-          type="text"
-          placeholder="Zone Name"/><br/>
-        <input
-          id="zipCode"
-          onChange={this.updateZone}
-          className="form-control"
-          type="text"
-          placeholder="Zip Code"/><br/>
-        <button onClick={this.submitZone} className="btn btn-success" type="submit">Add Zone</button>
+        <CreateZone onSubmit={this.submitZone} />
       </div>
     );
   }
