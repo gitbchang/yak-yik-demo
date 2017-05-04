@@ -68,23 +68,14 @@ class Zones extends Component {
     //   }
     //   console.log('ZONE CREATED:', response);
     // });
-    superagent
-    .post('api/zone')
-    .send(updatedZone)
-    .set('Accept', 'application/json')
-    .end((err, response) => {
-      if (err) {
-        console.log("errpr", err);
-      }
-      // const confirmation = response.body.confirmation;
-      //   if(confirmation != 'success'){
-      //     console.log("error message", response.body.message);
-      //   } else {
-      //     console.log("success", response.body);
-      //   }
-        console.log("success", response.body);
-        
+
+    axios({method: 'post', url: 'api/zone', data:updatedZone, responseType: 'json'}).then(function (response){
+      console.log("post response", response);
+    }).catch(function(error){
+      console.error("error", error);
     })
+        
+  
   }
 
   updateZone = (e) => {

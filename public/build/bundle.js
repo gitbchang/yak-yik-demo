@@ -12414,17 +12414,11 @@ var Zones = function (_Component) {
       //   }
       //   console.log('ZONE CREATED:', response);
       // });
-      _superagent2.default.post('api/zone').send(updatedZone).set('Accept', 'application/json').end(function (err, response) {
-        if (err) {
-          console.log("errpr", err);
-        }
-        // const confirmation = response.body.confirmation;
-        //   if(confirmation != 'success'){
-        //     console.log("error message", response.body.message);
-        //   } else {
-        //     console.log("success", response.body);
-        //   }
-        console.log("success", response.body);
+
+      (0, _axios2.default)({ method: 'post', url: 'api/zone', data: updatedZone, responseType: 'json' }).then(function (response) {
+        console.log("post response", response);
+      }).catch(function (error) {
+        console.error("error", error);
       });
     };
 
