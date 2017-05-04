@@ -12197,8 +12197,6 @@ var _styles2 = _interopRequireDefault(_styles);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -12216,8 +12214,6 @@ var Comments = function (_Component) {
     _this.submitComment = function () {
       console.log("submitted");
       var newComment = Object.assign({}, _this.state.comment);
-      var currentDate = Date.now();
-      newComment['timestamp'] = currentDate;
 
       _utils.APIManager.post('api/comment', newComment, function (err, response) {
         if (err) {
@@ -12258,8 +12254,7 @@ var Comments = function (_Component) {
     _this.state = {
       comment: {
         username: '',
-        body: '',
-        timestamp: ''
+        body: ''
       },
       commentList: []
     };
@@ -12282,8 +12277,6 @@ var Comments = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _React$createElement;
-
       var allComments = this.state.commentList.map(function (com, i) {
         return _react2.default.createElement(
           'li',
@@ -12319,12 +12312,6 @@ var Comments = function (_Component) {
             className: 'form-control',
             type: 'text',
             placeholder: 'Comment' }),
-          _react2.default.createElement('br', null),
-          _react2.default.createElement('input', (_React$createElement = {
-            type: 'text',
-            onChange: this.updateTime,
-            className: 'form-control'
-          }, _defineProperty(_React$createElement, 'type', 'text'), _defineProperty(_React$createElement, 'placeholder', 'timestamp'), _React$createElement)),
           _react2.default.createElement('br', null),
           _react2.default.createElement(
             'button',

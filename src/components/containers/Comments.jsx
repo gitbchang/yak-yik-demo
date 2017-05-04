@@ -12,8 +12,7 @@ class Comments extends Component {
     this.state = {
       comment: {
         username: '',
-        body: '',
-        timestamp: ''
+        body: ''
       },
       commentList: []
     }
@@ -35,8 +34,6 @@ class Comments extends Component {
   submitComment = () => {
     console.log("submitted");
     let newComment = Object.assign({}, this.state.comment);
-    let currentDate = Date.now();
-    newComment['timestamp'] = currentDate;
 
     APIManager.post('api/comment', newComment, (err, response) => {
       if(err) {
@@ -50,7 +47,7 @@ class Comments extends Component {
         commentList: updatedCommentList
       });
     });
-    
+
   };
 
   updateUsername = (e) => {
@@ -103,12 +100,6 @@ class Comments extends Component {
             className="form-control"
             type="text"
             placeholder="Comment"/><br/>
-          <input
-            type="text"
-            onChange={this.updateTime}
-            className="form-control"
-            type="text"
-            placeholder="timestamp"/><br/>
 
           <button onClick={this.submitComment} className="btn btn-info" type="submit">Submit Comment</button>
         </div>
