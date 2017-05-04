@@ -3,6 +3,7 @@ import superagent from 'superagent';
 import axios from 'axios';
 
 import Zone from '../presentation/Zone';
+import { APIManager } from '../../utils/';
 
 class Zones extends Component {
   constructor(props) {
@@ -26,25 +27,64 @@ class Zones extends Component {
     //   self.setState({list: results});
     // });
 
-    superagent
-      .get('api/zone')
-      .query(null)
-      .set('Accept', 'application/json')
-      .end((err, response) => {
-        if (err) {
-          console.log("error", err);
-        }
-        let results = response.body.results;
-        console.log(JSON.stringify(results));
-        this.setState({list: results});
-      });
+    // superagent
+    //   .get('api/zone')
+    //   .query(null)
+    //   .set('Accept', 'application/json')
+    //   .end((err, response) => {
+    //     if (err) {
+    //       console.log("error", err);
+    //     }
+    //     let results = response.body.results;
+    //     console.log(JSON.stringify(results));
+    //     this.setState({list: results});
+    //   });
+    APIManager.get('api/zone', null, (err, response) => {
+      if(err) {
+        console.log("error", err.message);
+        return;
+      }
+      this.setState({list: response.results});
+    });
 
   }
 
   submitZone = () => {
-    let updatedZoneList = Object.assign([], this.state.list);
-    updatedZoneList.push(this.state.newZone);
-    this.setState({list: updatedZoneList});
+    let updatedZone = Object.assign([], this.state.newZone);
+    // clean up object before sending to API
+    updatedZone['zipCodes'] = updatedZone.zipCode.split(',');
+    updatedZone['timestamp'] = '';
+    delete updatedZone.zipCode;
+    delete updatedZone.numComments;
+
+    console.log("updated zone", updatedZone);
+    // updatedZoneList.push(this.state.newZone);
+    // this.setState({list: updatedZoneList});
+
+    // APIManager.post('api/zone', updatedZone, (err, response) => {
+    //   if(err) {
+    //     console.log("error", err.message);
+    //     return;
+    //   }
+    //   console.log('ZONE CREATED:', response);
+    // });
+    superagent
+    .post('api/zone')
+    .send(updatedZone)
+    .set('Accept', 'application/json')
+    .end((err, response) => {
+      if (err) {
+        console.log("errpr", err);
+      }
+      // const confirmation = response.body.confirmation;
+      //   if(confirmation != 'success'){
+      //     console.log("error message", response.body.message);
+      //   } else {
+      //     console.log("success", response.body);
+      //   }
+        console.log("success", response.body);
+        
+    })
   }
 
   updateZone = (e) => {

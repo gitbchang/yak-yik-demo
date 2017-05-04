@@ -9677,6 +9677,8 @@ var _superagent = __webpack_require__(192);
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
+var _utils = __webpack_require__(229);
+
 var _Comment = __webpack_require__(88);
 
 var _Comment2 = _interopRequireDefault(_Comment);
@@ -9714,7 +9716,7 @@ var Comments = function (_Component) {
     _this.updateUsername = function (e) {
 
       var updatedComment = Object.assign({}, _this.state.comment);
-      updatedComment['userName'] = e.target.value;
+      updatedComment['username'] = e.target.value;
 
       _this.setState({ comment: updatedComment });
     };
@@ -9735,7 +9737,7 @@ var Comments = function (_Component) {
 
     _this.state = {
       comment: {
-        userName: '',
+        username: '',
         body: '',
         timestamp: ''
       },
@@ -9756,12 +9758,24 @@ var Comments = function (_Component) {
       //   self.setState({commentList: results});
       // });
 
-      _superagent2.default.get('api/comment').query(null).set('Accept', 'application/json').end(function (err, response) {
+      // superagent
+      //   .get('api/comment')
+      //   .query(null)
+      //   .set('Accept', 'application/json')
+      //   .end((err, response) => {
+      //     if (err) {
+      //       console.log("error", err);
+      //     }
+      //     let results = response.body.results;
+      //     this.setState({commentList: results});
+      //   });
+
+      _utils.APIManager.get('api/comment', null, function (err, response) {
         if (err) {
-          console.log("error", err);
+          console.log("error", err.message);
+          return;
         }
-        var results = response.body.results;
-        _this2.setState({ commentList: results });
+        _this2.setState({ commentList: response.results });
       });
     }
   }, {
@@ -9855,6 +9869,8 @@ var _Zone = __webpack_require__(89);
 
 var _Zone2 = _interopRequireDefault(_Zone);
 
+var _utils = __webpack_require__(229);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9872,9 +9888,36 @@ var Zones = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Zones.__proto__ || Object.getPrototypeOf(Zones)).call(this, props));
 
     _this.submitZone = function () {
-      var updatedZoneList = Object.assign([], _this.state.list);
-      updatedZoneList.push(_this.state.newZone);
-      _this.setState({ list: updatedZoneList });
+      var updatedZone = Object.assign([], _this.state.newZone);
+      // clean up object before sending to API
+      updatedZone['zipCodes'] = updatedZone.zipCode.split(',');
+      updatedZone['timestamp'] = '';
+      delete updatedZone.zipCode;
+      delete updatedZone.numComments;
+
+      console.log("updated zone", updatedZone);
+      // updatedZoneList.push(this.state.newZone);
+      // this.setState({list: updatedZoneList});
+
+      // APIManager.post('api/zone', updatedZone, (err, response) => {
+      //   if(err) {
+      //     console.log("error", err.message);
+      //     return;
+      //   }
+      //   console.log('ZONE CREATED:', response);
+      // });
+      _superagent2.default.post('api/zone').send(updatedZone).set('Accept', 'application/json').end(function (err, response) {
+        if (err) {
+          console.log("errpr", err);
+        }
+        // const confirmation = response.body.confirmation;
+        //   if(confirmation != 'success'){
+        //     console.log("error message", response.body.message);
+        //   } else {
+        //     console.log("success", response.body);
+        //   }
+        console.log("success", response.body);
+      });
     };
 
     _this.updateZone = function (e) {
@@ -9906,13 +9949,24 @@ var Zones = function (_Component) {
       //   self.setState({list: results});
       // });
 
-      _superagent2.default.get('api/zone').query(null).set('Accept', 'application/json').end(function (err, response) {
+      // superagent
+      //   .get('api/zone')
+      //   .query(null)
+      //   .set('Accept', 'application/json')
+      //   .end((err, response) => {
+      //     if (err) {
+      //       console.log("error", err);
+      //     }
+      //     let results = response.body.results;
+      //     console.log(JSON.stringify(results));
+      //     this.setState({list: results});
+      //   });
+      _utils.APIManager.get('api/zone', null, function (err, response) {
         if (err) {
-          console.log("error", err);
+          console.log("error", err.message);
+          return;
         }
-        var results = response.body.results;
-        console.log(JSON.stringify(results));
-        _this2.setState({ list: results });
+        _this2.setState({ list: response.results });
       });
     }
   }, {
@@ -10114,11 +10168,15 @@ var Zone = function (_Component) {
     value: function render() {
       var style = _styles2.default.zone;
       var currentZone = this.props.currentZone;
-      var allZips = [];
-      currentZone.zipCodes.forEach(function (zip) {
-        allZips.push(zip);
-      });
-      allZips = allZips.join(', ');
+
+      var zipString = '';
+      if (currentZone.zipCodes) {
+        if (currentZone.zipCodes.length > 1) {
+          zipString = currentZone.zipCodes.join(', ');
+        } else {
+          zipString = currentZone.zipCodes.join('');
+        }
+      }
 
       return _react2.default.createElement(
         'div',
@@ -10136,7 +10194,7 @@ var Zone = function (_Component) {
           'span',
           { className: 'detail' },
           'Zip: ',
-          allZips
+          zipString
         ),
         _react2.default.createElement('br', null),
         _react2.default.createElement(
@@ -28208,6 +28266,100 @@ try {
 
 module.exports = g;
 
+
+/***/ }),
+/* 228 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _superagent = __webpack_require__(192);
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
+var _axios = __webpack_require__(205);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var axiosUtil = {
+  get: function get(url, params, callback) {
+    (0, _axios2.default)({ method: 'get', url: url, params: params, responseType: 'json' }).then(function (response) {
+      callback(null, response.data);
+    }).catch(function (error) {
+      callback(error, null);
+    });
+  },
+  post: function post(url, body, callback) {
+    (0, _axios2.default)({ method: 'post', url: url, data: body, responseType: 'json' }).then(function (response) {
+      callback(null, response.data);
+    }).catch(function (error) {
+      callback(error, null);
+    });
+  }
+};
+
+var superagentUtil = {
+  get: function get(url, params, callback) {
+    _superagent2.default.get(url).query(params).set('Accept', 'application/json').end(function (err, response) {
+      if (err) {
+        callback(err, null);
+      }
+      var confirmation = response.body.confirmation;
+      // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
+      if (confirmation != 'success') {
+        callback({ message: response.body.message }, null);
+      } else {
+        callback(null, response.body);
+      }
+    });
+  },
+  post: function post(url, body, callback) {
+    _superagent2.default.post(url).send(body).set('Accept', 'application/json').end(function (err, response) {
+      if (err) {
+        callback(err, null);
+      }
+      var confirmation = response.body.confirmation;
+      // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
+      if (confirmation != 'success') {
+        callback({ message: response.body.message }, null);
+      } else {
+        callback(null, response.body);
+      }
+      // callback(null, response.body);
+    });
+  },
+  put: function put() {}
+};
+
+// export default axiosUtil;
+exports.default = superagentUtil;
+
+/***/ }),
+/* 229 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.APIManager = undefined;
+
+var _APIManager = __webpack_require__(228);
+
+var _APIManager2 = _interopRequireDefault(_APIManager);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.APIManager = _APIManager2.default;
 
 /***/ })
 /******/ ]);

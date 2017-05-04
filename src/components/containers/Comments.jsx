@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import superagent from 'superagent';
+import { APIManager } from '../../utils/';
 
 import Comment from '../presentation/Comment';
 import styles from './styles';
@@ -10,7 +11,7 @@ class Comments extends Component {
     super(props);
     this.state = {
       comment: {
-        userName: '',
+        username: '',
         body: '',
         timestamp: ''
       },
@@ -18,6 +19,7 @@ class Comments extends Component {
     }
   }
 
+  
   componentDidMount() {
 
     // const self = this;
@@ -27,17 +29,25 @@ class Comments extends Component {
     //   self.setState({commentList: results});
     // });
 
-    superagent
-      .get('api/comment')
-      .query(null)
-      .set('Accept', 'application/json')
-      .end((err, response) => {
-        if (err) {
-          console.log("error", err);
-        }
-        let results = response.body.results;
-        this.setState({commentList: results});
-      });
+    // superagent
+    //   .get('api/comment')
+    //   .query(null)
+    //   .set('Accept', 'application/json')
+    //   .end((err, response) => {
+    //     if (err) {
+    //       console.log("error", err);
+    //     }
+    //     let results = response.body.results;
+    //     this.setState({commentList: results});
+    //   });
+
+    APIManager.get('api/comment', null, (err, response) => {
+      if(err) {
+        console.log("error", err.message);
+        return;
+      }
+      this.setState({commentList: response.results});
+    });    
 
   }
 
@@ -52,7 +62,7 @@ class Comments extends Component {
   updateUsername = (e) => {
 
     let updatedComment = Object.assign({}, this.state.comment);
-    updatedComment['userName'] = e.target.value;
+    updatedComment['username'] = e.target.value;
 
     this.setState({comment: updatedComment});
   }
