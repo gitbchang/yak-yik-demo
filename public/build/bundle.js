@@ -12797,9 +12797,7 @@ var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var axiosUtil = _defineProperty({
+var axiosUtil = {
   get: function get(url, params, callback) {
     (0, _axios2.default)({ method: 'get', url: url, params: params, responseType: 'json' }).then(function (response) {
       callback(null, response.data);
@@ -12809,23 +12807,17 @@ var axiosUtil = _defineProperty({
   },
   post: function post(url, body, callback) {
     (0, _axios2.default)({ method: 'post', url: url, data: body, responseType: 'json' }).then(function (response) {
-      callback(null, response.data);
+      var confirmation = response.data.confirmation;
+      if (confirmation != 'success') {
+        callback({ message: response }, null);
+      } else {
+        callback(null, response.data);
+      }
     }).catch(function (error) {
       callback(error, null);
     });
   }
-}, 'post', function post(url, body, callback) {
-  (0, _axios2.default)({ method: 'post', url: url, data: body, responseType: 'json' }).then(function (response) {
-    var confirmation = response.data.confirmation;
-    if (confirmation != 'success') {
-      callback({ message: response }, null);
-    } else {
-      callback(null, response.data);
-    }
-  }).catch(function (error) {
-    callback(error, null);
-  });
-});
+};
 
 var superagentUtil = {
   get: function get(url, params, callback) {
@@ -12866,8 +12858,8 @@ var superagentUtil = {
   put: function put() {}
 };
 
-// export default axiosUtil;
-exports.default = superagentUtil;
+exports.default = axiosUtil;
+// export default superagentUtil;
 
 /***/ }),
 /* 120 */

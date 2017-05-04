@@ -14,15 +14,6 @@ const axiosUtil = {
   post: (url, body, callback) => {
     axios({method: 'post', url: url, data: body, responseType: 'json'})
       .then(function (response) {
-        callback(null, response.data);
-      })
-      .catch(function (error) {
-        callback(error, null);
-      })
-  },
-  post: (url, body, callback) => {
-    axios({method: 'post', url: url, data: body, responseType: 'json'})
-      .then(function (response) {
         const confirmation = response.data.confirmation;
         if (confirmation != 'success') {
           callback({message: response}, null);
@@ -84,5 +75,5 @@ const superagentUtil = {
   put: () => {}
 };
 
-// export default axiosUtil;
-export default superagentUtil;
+export default axiosUtil;
+// export default superagentUtil;
