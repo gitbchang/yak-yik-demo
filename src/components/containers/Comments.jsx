@@ -22,25 +22,6 @@ class Comments extends Component {
   
   componentDidMount() {
 
-    // const self = this;
-    // axios({method: 'get', url: 'api/comment', responseType: 'json'}).then(function (response) {
-    //   console.log(response.data);
-    //   let results = response.data.results;
-    //   self.setState({commentList: results});
-    // });
-
-    // superagent
-    //   .get('api/comment')
-    //   .query(null)
-    //   .set('Accept', 'application/json')
-    //   .end((err, response) => {
-    //     if (err) {
-    //       console.log("error", err);
-    //     }
-    //     let results = response.body.results;
-    //     this.setState({commentList: results});
-    //   });
-
     APIManager.get('api/comment', null, (err, response) => {
       if(err) {
         console.log("error", err.message);
@@ -53,10 +34,23 @@ class Comments extends Component {
 
   submitComment = () => {
     console.log("submitted");
-    let updatedList = Object.assign([], this.state.commentList);
-    updatedList.push(this.state.comment);
+    let newComment = Object.assign({}, this.state.comment);
+    let currentDate = Date.now();
+    newComment['timestamp'] = currentDate;
 
-    this.setState({commentList: updatedList});
+    APIManager.post('api/comment', newComment, (err, response) => {
+      if(err) {
+        console.log("error", err.message);
+        return
+      }
+      console.log("Comment created", JSON.stringify(response));
+      let updatedCommentList = Object.assign([], this.state.commentList);
+      updatedCommentList.push(response.result);
+      this.setState({
+        commentList: updatedCommentList
+      });
+    });
+    
   };
 
   updateUsername = (e) => {

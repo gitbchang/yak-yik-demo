@@ -20,25 +20,6 @@ class Zones extends Component {
 
   componentDidMount() {
 
-    // const self = this;
-    // axios({method: 'get', url: 'api/zone', responseType: 'json'}).then(function (response) {
-    //   console.log(response.data);
-    //   let results = response.data.results;
-    //   self.setState({list: results});
-    // });
-
-    // superagent
-    //   .get('api/zone')
-    //   .query(null)
-    //   .set('Accept', 'application/json')
-    //   .end((err, response) => {
-    //     if (err) {
-    //       console.log("error", err);
-    //     }
-    //     let results = response.body.results;
-    //     console.log(JSON.stringify(results));
-    //     this.setState({list: results});
-    //   });
     APIManager.get('api/zone', null, (err, response) => {
       if(err) {
         console.log("error", err.message);
@@ -67,41 +48,12 @@ class Zones extends Component {
         return;
       }
       console.log('ZONE CREATED:', JSON.stringify(response));
-      // let updatedList = Object.assign([], this.state.list);
-      
-      // updatedList.push(response.result);
-      // this.setState({
-      //   list: updatedList
-      // });
-    });
-
-    // axios({method: 'post', url: 'api/zone', data:updatedZone, responseType: 'json'}).then(function (response){
-    //   console.log("post response", response);
-    //   const confirmation = response.data.confirmation;
-    //   if(confirmation != 'success'){
-    //     console.error("error", confirmation);
-    //   } 
-    // }).catch(function(error){
-    //   console.error("error", error);
-    // })
-
-    // superagent
-    // .post('api/zone')
-    // .send({name: 'prefilled data', zipCodes: ['56565']})
-    // .set('Accept', 'application/json')
-    // .end((err, response) => {
-    //   if (err) {
-    //     callback(err, null);
-    //   }
-    // const confirmation = response.body.confirmation;
-    //     // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
-    //     if(confirmation != 'success'){
-    //       console.error("error", response.body.message);
-    //     } else {
-    //       console.log("post reponse", response.body);
-    //     }        
-    // });
-        
+      let updatedList = Object.assign([], this.state.list);
+      updatedList.push(response.result);
+      this.setState({
+        list: updatedList
+      });
+    });       
   
   }
 
@@ -122,6 +74,7 @@ class Zones extends Component {
       });
     return (
       <div>
+        <h2>Choose a Zone</h2>
         <ol>
           {listItems}
         </ol>

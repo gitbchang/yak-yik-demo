@@ -12215,10 +12215,22 @@ var Comments = function (_Component) {
 
     _this.submitComment = function () {
       console.log("submitted");
-      var updatedList = Object.assign([], _this.state.commentList);
-      updatedList.push(_this.state.comment);
+      var newComment = Object.assign({}, _this.state.comment);
+      var currentDate = Date.now();
+      newComment['timestamp'] = currentDate;
 
-      _this.setState({ commentList: updatedList });
+      _utils.APIManager.post('api/comment', newComment, function (err, response) {
+        if (err) {
+          console.log("error", err.message);
+          return;
+        }
+        console.log("Comment created", JSON.stringify(response));
+        var updatedCommentList = Object.assign([], _this.state.commentList);
+        updatedCommentList.push(response.result);
+        _this.setState({
+          commentList: updatedCommentList
+        });
+      });
     };
 
     _this.updateUsername = function (e) {
@@ -12258,25 +12270,6 @@ var Comments = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;
-
-      // const self = this;
-      // axios({method: 'get', url: 'api/comment', responseType: 'json'}).then(function (response) {
-      //   console.log(response.data);
-      //   let results = response.data.results;
-      //   self.setState({commentList: results});
-      // });
-
-      // superagent
-      //   .get('api/comment')
-      //   .query(null)
-      //   .set('Accept', 'application/json')
-      //   .end((err, response) => {
-      //     if (err) {
-      //       console.log("error", err);
-      //     }
-      //     let results = response.body.results;
-      //     this.setState({commentList: results});
-      //   });
 
       _utils.APIManager.get('api/comment', null, function (err, response) {
         if (err) {
@@ -12413,41 +12406,12 @@ var Zones = function (_Component) {
           return;
         }
         console.log('ZONE CREATED:', JSON.stringify(response));
-        // let updatedList = Object.assign([], this.state.list);
-
-        // updatedList.push(response.result);
-        // this.setState({
-        //   list: updatedList
-        // });
+        var updatedList = Object.assign([], _this.state.list);
+        updatedList.push(response.result);
+        _this.setState({
+          list: updatedList
+        });
       });
-
-      // axios({method: 'post', url: 'api/zone', data:updatedZone, responseType: 'json'}).then(function (response){
-      //   console.log("post response", response);
-      //   const confirmation = response.data.confirmation;
-      //   if(confirmation != 'success'){
-      //     console.error("error", confirmation);
-      //   } 
-      // }).catch(function(error){
-      //   console.error("error", error);
-      // })
-
-      // superagent
-      // .post('api/zone')
-      // .send({name: 'prefilled data', zipCodes: ['56565']})
-      // .set('Accept', 'application/json')
-      // .end((err, response) => {
-      //   if (err) {
-      //     callback(err, null);
-      //   }
-      // const confirmation = response.body.confirmation;
-      //     // we need to check if our API call was a success. The first error handling checks if we hit the server correctly.
-      //     if(confirmation != 'success'){
-      //       console.error("error", response.body.message);
-      //     } else {
-      //       console.log("post reponse", response.body);
-      //     }        
-      // });
-
     };
 
     _this.updateZone = function (e) {
@@ -12472,25 +12436,6 @@ var Zones = function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      // const self = this;
-      // axios({method: 'get', url: 'api/zone', responseType: 'json'}).then(function (response) {
-      //   console.log(response.data);
-      //   let results = response.data.results;
-      //   self.setState({list: results});
-      // });
-
-      // superagent
-      //   .get('api/zone')
-      //   .query(null)
-      //   .set('Accept', 'application/json')
-      //   .end((err, response) => {
-      //     if (err) {
-      //       console.log("error", err);
-      //     }
-      //     let results = response.body.results;
-      //     console.log(JSON.stringify(results));
-      //     this.setState({list: results});
-      //   });
       _utils.APIManager.get('api/zone', null, function (err, response) {
         if (err) {
           console.log("error", err.message);
@@ -12512,6 +12457,11 @@ var Zones = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
+        _react2.default.createElement(
+          'h2',
+          null,
+          'Choose a Zone'
+        ),
         _react2.default.createElement(
           'ol',
           null,
@@ -12863,8 +12813,8 @@ var superagentUtil = {
   put: function put() {}
 };
 
-// export default axiosUtil;
-exports.default = superagentUtil;
+exports.default = axiosUtil;
+// export default superagentUtil;
 
 /***/ }),
 /* 120 */
